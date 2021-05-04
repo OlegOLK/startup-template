@@ -5,4 +5,4 @@ services:
     image: ${DOCKER_REGISTRY-}startupweb
     build:
       context: .
-      dockerfile: Startup.Web/Dockerfile
+      dockerfile: Web/Startup.Web/Dockerfile
