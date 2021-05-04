@@ -25,6 +25,7 @@ namespace Startup.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
             services.AddSystemMetrics();
             services.AddDataProtection(s =>
             {
@@ -41,6 +42,7 @@ namespace Startup.Web
             {
                 options.DefaultApiVersion = new ApiVersion(1, 0);
                 options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
             });
 
             services.AddSwagger();
@@ -62,6 +64,7 @@ namespace Startup.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }

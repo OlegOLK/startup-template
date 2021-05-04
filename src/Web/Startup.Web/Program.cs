@@ -36,7 +36,10 @@ namespace Startup.Web
             .UseSerilog()
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<Startup>();
+                var port = Environment.GetEnvironmentVariable("PORT");
+
+                webBuilder.UseStartup<Startup>()
+                .UseUrls("http://*:*" + port);
             });
         }
     }
