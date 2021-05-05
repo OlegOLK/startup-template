@@ -12,15 +12,15 @@ COPY ["/src/Web/Startup.Web.UnitTestes/Startup.Web.UnitTestes.csproj", "Web/Star
 COPY ["/src/docker-compose.dcproj", "docker-compose.dcproj"]
 
 COPY ["/src/NuGet.config", "NuGet.config"]
-COPY . .
 
 RUN dotnet restore "Startup.sln"
 
-WORKDIR /Web/Startup.Web
+COPY . .
+WORKDIR /src/Web/Startup.Web
 RUN dotnet publish --no-restore -c Release -o /app
 
 FROM build as unittest
-WORKDIR /Web/Startup.Web.UnitTests
+WORKDIR /src/Web/Startup.Web.UnitTests
 
 FROM build AS publish
 
