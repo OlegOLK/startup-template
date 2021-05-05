@@ -9,6 +9,8 @@ COPY [ "/src/Startup.sln", "Startup.sln" ]
 COPY ["/src/Web/Startup.Web/Startup.Web.csproj", "Web/Startup.Web/"]
 COPY ["/src/Web/Startup.Web.UnitTestes/Startup.Web.UnitTestes.csproj", "Web/Startup.Web.UnitTestes/"]
 
+COPY ["/src/docker-compose.dcproj", "docker-compose.dcproj"]
+
 RUN dotnet restore "Startup.sln"
 
 COPY . .
