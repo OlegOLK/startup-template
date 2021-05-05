@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Prometheus.DotNetRuntime;
 using Serilog;
-using Serilog.Events;
 using System;
 
 namespace Startup.Web
