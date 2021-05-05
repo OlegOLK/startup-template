@@ -1,0 +1,35 @@
+[sources.my_source_id]
+  type = "prometheus_scrape" # required
+  endpoints = ["https://startup-olk-web.herokuapp.com/metrics"] # required
+  scrape_interval_secs = 15 # optional, default, seconds
+
+# [sources.my_source_id]
+#   type = "docker_logs" # required
+#   docker_host = "https://localhost:64608/" # optional, no default
+  #include_containers = ["include_", "include_me_0", "ad08cc418cf9"] # optional, no default
+  #include_images = ["httpd", "redis"] # optional, no default
+  #include_labels = ["com.example.vendor=Timber Inc.", "com.example.name=Vector"] # optional, no default
+
+[sinks.my_sink_id]
+  # General
+  type = "console" # required
+  inputs = ["my_source_id"] # required
+  target = "stdout" # optional, default
+  encoding.codec = "json" # required
+
+
+[sinks.my_sink_test]
+  type = "prometheus_remote_write" # required
+  inputs = ["my_source_id"] # required
+  #default_namespace = "service" # optional, no default
+  endpoint = "https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push" # required
+
+  # Healthcheck
+  healthcheck.enabled = true # optional, default
+  auth.password = "eyJrIjoiNTlhNjJjNmQyNjFlZjU5YmZlOTY0NjY2Y2ZhYzNmZTVlMDYxN2EzMCIsIm4iOiJjY2NjIiwiaWQiOjQ4MDUzNX0=" # required
+  auth.strategy = "basic" # required
+  auth.user = "76369" # required
+
+[api]
+enabled = true
+address = "127.0.0.1:8686"
