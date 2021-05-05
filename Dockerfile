@@ -4,11 +4,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-WORKDIR /src
-COPY [ "Startup.sln", "Startup.sln" ]
+COPY [ "/src/Startup.sln", "Startup.sln" ]
 
-COPY ["Web/Startup.Web/Startup.Web.csproj", "Web/Startup.Web/"]
-COPY ["Web/Startup.Web.UnitTestes/Startup.Web.UnitTestes.csproj", "Web/Startup.Web.UnitTestes/"]
+COPY ["/src/Web/Startup.Web/Startup.Web.csproj", "Web/Startup.Web/"]
+COPY ["/src/Web/Startup.Web.UnitTestes/Startup.Web.UnitTestes.csproj", "Web/Startup.Web.UnitTestes/"]
 
 RUN dotnet restore "Startup.sln"
 
