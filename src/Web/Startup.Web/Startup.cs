@@ -10,6 +10,7 @@ using Prometheus.SystemMetrics;
 using Startup.Web.Cors;
 using Startup.Web.Middlewares;
 using Startup.Web.Swagger;
+using Prometheus.HttpClientMetrics;
 
 namespace Startup.Web
 {
@@ -25,6 +26,7 @@ namespace Startup.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddHealthChecks();
             services.AddSystemMetrics();
             services.AddDataProtection(s =>
@@ -57,7 +59,7 @@ namespace Startup.Web
             }
             app.UseCustomMiddlewares(env);
             app.UseRouting();
-            app.UseMetricServer();
+            app.UseHttpMetrics();
             
             app.UseCors(DefaultCorsPolicy.DefaultPolicyName);
 
