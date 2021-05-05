@@ -29,4 +29,4 @@ COPY --from=publish /app .
 # ENTRYPOINT ["dotnet", "Startup.Web.dll"]
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet Startup.Web.dll
 
-HEALTHCHECK CMD curl --fail https://startup-olk-web.herokuapp.com/health || exit 1 
+HEALTHCHECK CMD curl --fail https://startup-olk-web.herokuapp.com/metrics || exit 1 
