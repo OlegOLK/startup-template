@@ -26,4 +26,5 @@ FROM build AS publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Startup.Web.dll"]
+# ENTRYPOINT ["dotnet", "Startup.Web.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet Startup.Web.dll
