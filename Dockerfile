@@ -11,6 +11,8 @@ COPY ["/src/Web/Startup.Web.UnitTestes/Startup.Web.UnitTestes.csproj", "Web/Star
 
 COPY ["/src/docker-compose.dcproj", "docker-compose.dcproj"]
 
+COPY ["/src/NuGet.config", "NuGet.config"]
+
 RUN dotnet restore "Startup.sln"
 
 COPY . .
