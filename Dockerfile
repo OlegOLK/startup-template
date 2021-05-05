@@ -16,11 +16,11 @@ COPY ["/src/NuGet.config", "NuGet.config"]
 RUN dotnet restore "Startup.sln"
 
 COPY . .
-WORKDIR /src/Web/Startup.Web
+WORKDIR /Web/Startup.Web
 RUN dotnet publish --no-restore -c Release -o /app
 
 FROM build as unittest
-WORKDIR /src/Web/Startup.Web.UnitTests
+WORKDIR /Web/Startup.Web.UnitTests
 
 FROM build AS publish
 
