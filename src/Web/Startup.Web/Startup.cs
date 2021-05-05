@@ -65,6 +65,7 @@ namespace Startup.Web
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
+                endpoints.MapMetrics();
             });
         }
     }
