@@ -28,7 +28,6 @@ namespace Startup.Web
         {
             services.AddHttpClient();
             services.AddHealthChecks();
-            // services.AddSystemMetrics();
             services.AddDataProtection(s =>
             {
                 s.ApplicationDiscriminator = "Startup.Web";

@@ -23,13 +23,36 @@
   inputs = ["my_source_id"] # required
   #default_namespace = "service" # optional, no default
   endpoint = "https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push" # required
-
-  # Healthcheck
-  healthcheck.enabled = true # optional, default
-  auth.password = "eyJrIjoiNTlhNjJjNmQyNjFlZjU5YmZlOTY0NjY2Y2ZhYzNmZTVlMDYxN2EzMCIsIm4iOiJjY2NjIiwiaWQiOjQ4MDUzNX0=" # required
+  auth.password = "eyJrIjoiN2U3MDM2ODE1ODYyMjBlY2E3MjU1NzkzYjA3YzM0YTdiNTNiYjUyYSIsIm4iOiJjdnZ2IiwiaWQiOjQ4MDUzNX0=" # required
   auth.strategy = "basic" # required
   auth.user = "76369" # required
 
+[sources.my_heroku_logs]
+  type = "heroku_logs" # required
+  address = "0.0.0.0:80" # required
+
+
+[sinks.my_sink_id]
+  # General
+  type = "loki" # required
+  inputs = ["my_heroku_logs"] # required
+  endpoint = "https://logs-prod-us-central1.grafana.net" # required
+
+  auth.strategy = "basic" # required
+  auth.token = "eyJrIjoiN2U3MDM2ODE1ODYyMjBlY2E3MjU1NzkzYjA3YzM0YTdiNTNiYjUyYSIsIm4iOiJjdnZ2IiwiaWQiOjQ4MDUzNX0=" # required
+  auth.user = "37161" # required
+
+  # Encoding
+  encoding.codec = "json" # required
+
+  # Healthcheck
+  # healthcheck.enabled = true # optional, default
+
+  # Labels
+  # labels.forwarder = "vector" # example
+  # labels.event = "{{ event_field }}" # example
+  # labels.key = "value" # example
+
 [api]
 enabled = true
-address = "127.0.0.1:8686"
+address = "127.0.0.1:8899"
