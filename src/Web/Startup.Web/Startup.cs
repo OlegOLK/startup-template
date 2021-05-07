@@ -1,4 +1,6 @@
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -6,11 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Prometheus;
-using Prometheus.SystemMetrics;
 using Startup.Web.Cors;
+using Startup.Web.HealthChecks;
 using Startup.Web.Middlewares;
 using Startup.Web.Swagger;
-using Prometheus.HttpClientMetrics;
 
 namespace Startup.Web
 {
@@ -26,27 +27,26 @@ namespace Startup.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient();
-            services.AddHealthChecks();
-            services.AddDataProtection(s =>
-            {
-                s.ApplicationDiscriminator = "Startup.Web";
-            });
-
-            services.AddCors(s =>
-            {
-                s.CreateDefaultPolicy(Configuration);
-            });
+            services
+                .AddHttpClient()
+                .AddWebHealthChecks()
+                .AddCors(s =>
+                {
+                    s.CreateDefaultPolicy(Configuration);
+                })
+                .AddApiVersioning(options =>
+                {
+                    options.DefaultApiVersion = new ApiVersion(1, 0);
+                    options.ReportApiVersions = true;
+                    options.AssumeDefaultVersionWhenUnspecified = true;
+                })
+                .AddSwagger()
+                .AddDataProtection(s =>
+                {
+                    s.ApplicationDiscriminator = "Startup.Web";
+                });
 
             services.AddControllers();
-            services.AddApiVersioning(options =>
-            {
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.ReportApiVersions = true;
-                options.AssumeDefaultVersionWhenUnspecified = true;
-            });
-
-            services.AddSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,18 +56,23 @@ namespace Startup.Web
             {
                 app.UseSwagger(provider);
             }
-            app.UseCustomMiddlewares(env);
-            app.UseRouting();
-            app.UseHttpMetrics();
-            
-            app.UseCors(DefaultCorsPolicy.DefaultPolicyName);
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapHealthChecks("/health");
-                endpoints.MapMetrics();
-            });
+            app
+                .UseCustomMiddlewares(env)
+                .UseRouting()
+                .UseHttpMetrics()
+                .UseCors(DefaultCorsPolicy.DefaultPolicyName)
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                    endpoints.MapHealthChecks("/healthz", new HealthCheckOptions
+                    {
+                        Predicate = _ => true,
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
+                    endpoints.MapHealthChecksUI();
+                    endpoints.MapMetrics();
+                });
         }
     }
 }

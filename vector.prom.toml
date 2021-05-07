@@ -1,0 +1,13 @@
+[sources.source_web_metrics]
+type="prometheus_scrape"
+endpoints=["https://startup-olk-web.herokuapp.com/metrics"]
+scrape_interval_secs=15
+
+[sinks.sink_grafana_prom_cloud]
+type = "prometheus_remote_write" # required
+inputs = ["source_web_metrics"] # required
+default_namespace = "web_app"
+endpoint="https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push"
+auth.password="p"
+auth.strategy="basic" # required
+auth.user="user"

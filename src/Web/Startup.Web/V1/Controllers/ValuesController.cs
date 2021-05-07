@@ -51,7 +51,9 @@ namespace Startup.Web.V1.Controllers
         // DELETE api/<ValuesController>/5
         [ProducesResponseType(204)]
         [HttpDelete("{id}")]
-        public void Delete(int id) => NoContent();
-
+        public void Delete(int id)
+        {
+            NoContent();
+        }
     }
 }

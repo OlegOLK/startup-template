@@ -1,0 +1,30 @@
+[sources.source_heroku_drain]
+type = "http" # required
+address="0.0.0.0:80"
+encoding="text" # optional, default
+
+# [transforms.transform_heroku_drain]
+# type = "remap" # required
+# inputs = ["source_heroku_drain"] # required
+# source = ". |= parse_syslog!(.message)"
+
+[sinks.sink_grafana_loki]
+# General
+type = "loki" # required
+inputs = ["source_heroku_drain"] # required
+endpoint="https://logs-prod-us-central1.grafana.net"
+
+auth.strategy = "basic" # required
+auth.password="${LOKI_PASSWORD}" # required
+auth.user="${LOKI_USERNAME}" # required
+
+# Encoding
+encoding.codec = "json" # required
+
+# Healthcheck
+healthcheck.enabled = false # optional, default
+
+# Labels
+labels.forwarder = "startup_web" # example
+labels.event = "{{ event_field }}" # example
+labels.key = "value" # example
